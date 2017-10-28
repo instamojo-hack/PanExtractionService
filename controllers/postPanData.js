@@ -3,24 +3,10 @@ const vision = require('@google-cloud/vision')({
   keyFilename: 'google-vision-key.json'
 });
 
+const async = require("async");
 const admin = require("../services/firebaseAdmin");
-const helper = require("../lib/googleVisionHelper");
-
-const prepareFirebasePayload = function prepareFirebasePayload(parsedResponse, imgBufferData) {
-  parsedResponse.rawImage = imgBufferData;
-  console.log("Firebase payload: \n", parsedResponse);
-  return parsedResponse;
-}
-
-const pushToFirebase = function pushToFirebase(firebasePayload) {
-  admin.database().ref(`/panDetails`)
-  .push(firebasePayload)
-  .then(() => {
-    console.log("Sucessfully pushed to firebase");
-  }).catch((err) => {
-    console.error(err);
-  });
-}
+const googleVisionHelper = require("../lib/googleVisionHelper");
+const firebaseHelper = require("../lib/fireBaseHelper");
 
 const extractImgBufferData = function(req) {
   console.log(req.files);
@@ -30,38 +16,65 @@ const extractImgBufferData = function(req) {
   return base64EncodedImgData;
 }
 
-const validatePanImage = function(image) {
-  vision.labelDetection(image).then(response => {
-    
-  }).catch(err => {
-    console.error(err);
-    res.status(500);
-    return res.send("Error in labelDetection");
-  });
-}
-
 const processPanImage = function(req, res) {
   if (!req.files || (Object.keys(req.files).length === 0 && req.files.constructor === Object)){
     console.error("req.files is not populated");
     res.status(500)
     return res.send("Error in processPanImage");
-  } 
+  }
   const imgBufferData = extractImgBufferData(req);
   const image = {
     content: imgBufferData
   }
-  res.send("OK")
-
-  // vision.textDetection(image).then(response => {
-  //   const parsedResponse = helper.parsePanCardResponse(response);
-  //   const firebasePayload = prepareFirebasePayload(parsedResponse, imgBufferData)
-  //   pushToFirebase(firebasePayload);
-  //   res.json(parsedResponse);
-  // }).catch(err => {
-  //   console.error(err);
-  //   res.status(500);
-  //   return res.send("Error in textDetection");
-  // });
+  async.parallel({
+    validateLabels: function validateLabels(cb) {
+      console.log("Running label detection");
+      vision.labelDetection(image).then(response => {
+        const IdentityDocumentConfidenceScore = googleVisionHelper.parseLabelDetectionResponse(response);
+        const PASS_THRESHOLD_CONFIDENCE = 0.75;
+        const passed = IdentityDocumentConfidenceScore > PASS_THRESHOLD_CONFIDENCE;
+        console.log(`IdentityDocumentConfidenceScore: ${IdentityDocumentConfidenceScore} ; passed: ${passed}`);
+        cb(null, passed);
+      }).catch(err => {
+        cb(err, null);
+      });
+    },
+    validateWeb: function validateLabels(cb) {
+      vision.webDetection(image).then(response => {
+        const panConfidenceScore = googleVisionHelper.parseWebDetectionResponse(response);
+        const PASS_THRESHOLD_CONFIDENCE = 0.75;
+        const passed = panConfidenceScore > PASS_THRESHOLD_CONFIDENCE;
+        console.log(`panConfidenceScore: ${panConfidenceScore} ; passed: ${passed}`);
+        cb(null, passed);
+      }).catch(err => {
+        cb(err, null);
+      });
+    }
+  },
+  function (err, results) {
+    if(err) {
+      console.error(err);
+      res.status(500);
+      return res.send("Something went wrong");
+    }
+    if (!(results.validateLabels && results.validateWeb)) {
+      console.error("PAN validation failed.");
+      res.status(422);
+      return res.send("PAN validation failed!");
+    }
+    console.log("All validations passed!");
+  
+    vision.textDetection(image).then(response => {
+      const parsedResponse = googleVisionHelper.parseTextDetectionResponse(response);
+      const firebasePayload = firebaseHelper.prepareFirebasePayload(parsedResponse, imgBufferData)
+      firebaseHelper.pushToFirebase(firebasePayload);
+      res.json(parsedResponse);
+    }).catch(err => {
+      console.error(err);
+      res.status(500);
+      return res.send("Error in textDetection");
+    });
+  });
 }
 
 module.exports = {
