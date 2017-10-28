@@ -1,36 +1,35 @@
-// Imports the Google Cloud client library
-const Vision = require('@google-cloud/vision');
+const vision = require('@google-cloud/vision')({
+  projectId: 'hack-mojo',
+  keyFilename: 'google-vision-key.json'
+});
 
-// Creates a client
-const vision = new Vision();
+const helper = require('../lib/googleVisionHelper');
 
-// The name of the image file to annotate
-const fileName = './resources/wakeupcat.jpg';
+const extractImgBufferData = function(req) {
+  const fileName = Object.keys(req.files)[0];
+  const imgDataBuffer = new Buffer(req.files.sample.data);
+  const base64EncodedImgData = imgDataBuffer.toString('base64');
+  return base64EncodedImgData;
+}
 
-// Prepare the request object
-const request = {
-  source: {
-    filename: fileName
+const processImage = function(req, res) {
+  if (!req.files){
+    res.status(500)
+    return res.send("Something went wrong");
+  } 
+  const image = {
+    content: extractImgBufferData(req)
   }
-};
-
-// Performs label detection on the image file
-vision.labelDetection(request)
-  .then((results) => {
-    const labels = results[0].labelAnnotations;
-
-    console.log('Labels:');
-    labels.forEach((label) => console.log(label.description));
-  })
-  .catch((err) => {
-    console.error('ERROR:', err);
+  vision.textDetection(image).then(response => {
+    const parsedResponse = helper.parsePanCardResponse(response);
+    res.json(parsedResponse);
+  }).catch(err => {
+    console.error(err);
+    res.status(500);
+    return res.send("Something went wrong");
   });
-
-  const extract = function(requestBody) {
-    
-  }
-
+}
 
 module.exports = {
-  extract: extract
+  processImage: processImage
 }
