@@ -1,7 +1,7 @@
 const admin = require("../services/firebaseAdmin");
 
 const getPanData = function getPanData(req, res) {
-  console.log("Fetching PAN details from firebas...");
+  console.log("Fetching PAN details from firebase...");
   admin.database().ref(`/panDetails`)
   .on('value', snapshot => {
     return res.json(snapshot.val());
