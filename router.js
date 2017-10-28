@@ -10,9 +10,9 @@ module.exports = function(app) {
    * and returns the extracted information.
    */
   app.post("/api/upload", function(req, res) {
-    console.log(req.files.sample.data);
+    //console.log(req.files.sample.data);
     //console.log(req.body);
-    const imgDataBuffer = new Buffer(req.files.sample.data);
-    const base64EncodedImgData = imgDataBuffer.toString('base64');
+    //const imgDataBuffer = new Buffer(req.files.sample.data);
+    //const base64EncodedImgData = imgDataBuffer.toString('base64');
     res.send("OK!");
   })};
