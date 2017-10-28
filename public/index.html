@@ -58,11 +58,8 @@
             <img src="img/pan-card.jpg" id="preview-img" />
             <div id="centered_text">upload pan card</div>
           </div>
-          <form>
-            <div class="form-group text-center">
-              <!-- <label for="email">:</label> -->
-              <input type="file" class="file-input" id="input_file" style="display: none">
-            </div>
+          <form action="api/upload" method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" class="file-input" id="input_file">
             <div class="text-center"> 
               <button type="submit" class="btn btn-info">Submit</button>
             </div>
@@ -84,7 +81,6 @@
     <script type="text/javascript">
       function uploadFile() {
         document.getElementById('input_file').click();
-        // body...
       }
       document.getElementById('input_file').onchange = function () {
           var reader = new FileReader();

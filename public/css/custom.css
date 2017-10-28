@@ -12,7 +12,8 @@ body {
 }
 
 .file-input {
-  height: 3rem;
+  height: 1rem;
+  visibility: hidden;
   width: auto;
 }
 
@@ -36,4 +37,10 @@ img {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+/*login signup css*/
+
+.btn-info {
+  background-color: #4174b1;
 }
