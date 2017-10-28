@@ -1,0 +1,33 @@
+{
+  "responses": [
+      {
+          "labelAnnotations": [
+              {
+                  "mid": "/m/01_v7j",
+                  "description": "identity document",
+                  "score": 0.95135367
+              },
+              {
+                  "mid": "/m/03scnj",
+                  "description": "line",
+                  "score": 0.7104627
+              },
+              {
+                  "mid": "/m/0cw2t",
+                  "description": "driver's license",
+                  "score": 0.6633013
+              },
+              {
+                  "mid": "/m/01jwgf",
+                  "description": "product",
+                  "score": 0.5347848
+              },
+              {
+                  "mid": "/m/03gq5hm",
+                  "description": "font",
+                  "score": 0.5063064
+              }
+          ]
+      }
+  ]
+}

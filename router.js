@@ -15,5 +15,5 @@ module.exports = function(app) {
    */
   app.post("/api/pan", postPanDataController.processImage);
 
-  app.get("/api/pan", getPanDataController.getPanData)
+  app.get("/api/pan", getPanDataController.getPanData);
 };
