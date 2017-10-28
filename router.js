@@ -9,12 +9,7 @@ module.exports = function(app) {
   app.get('/login', function(req, res) {
     res.sendFile(__dirname + '/public/template/login.html');
   })
-
-  app.get('/index2', function(req, res) {
-    res.sendFile(__dirname + '/public/index2.html');
-  })
-
-
+  
   app.get('/admin', function(req, res) {
     res.sendFile(__dirname + '/public/template/admin.html');
   })

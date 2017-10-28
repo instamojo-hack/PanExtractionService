@@ -214,8 +214,12 @@ td.text-right {
   background-repeat: no-repeat;
   background-position: center center;
 }
+#results,
+#captureCanvas {
+  transition: all 500ms linear;
+}
 /*custom form elements*/
-.feedback-btns button[type="submit"] {
+.btn_app {
     color: #343642;
     background: #fff;
     width: 160px;
@@ -228,7 +232,7 @@ td.text-right {
     border: 2px solid #343642;
     transition: all 300ms ease 0s;
 }
-.feedback-btns button[type="submit"]:hover {
+.btn_app:hover {
     background: #343642;
     color: #fff;
     transition: all 300ms ease 0s;
