@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Instamojo Hack Day</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="css/business-frontpage.css" rel="stylesheet">
+    <link href="css/custom.css" rel="stylesheet">
+
+  </head>
+
+  <body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+      <div class="container">
+        <a class="navbar-brand" href="#">Get your KYC Done</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <!-- <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="#">Home
+                <span class="sr-only">(current)</span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">About</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Services</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Contact</a>
+            </li>
+          </ul>
+        </div> -->
+      </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+      <div class="row img-upload">
+        <div class="col-sm-12 user-image">
+          <div class="file-preview" onclick="uploadFile()">
+            <img src="img/pan-card.jpg" id="preview-img" />
+            <div id="centered_text">upload pan card</div>
+          </div>
+          <form action="api/pan" method="POST" enctype="multipart/form-data" id="pan-form">
+            <input type="file" name="file" class="file-input" id="input_file">
+            <div class="text-center"> 
+              <button type="submit" class="btn btn-info">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!-- /.row -->
+      <div class="row response-message text-center">
+        <div class="success-message">Pan card submitted sucessfully!</div>
+        <div class="error-message">Please upload valid pan card!</div>
+      </div>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p>
+      </div>
+      <!-- /.container -->
+    </footer>
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script type="text/javascript">
+      function uploadFile() {
+        document.getElementById('input_file').click();
+      }
+      document.getElementById('input_file').onchange = function () {
+        var imageElement = document.getElementById("preview-img");
+        var centeredText = document.getElementById("centered_text");
+        imageElement.src = e.target.result;
+        imageElement.style.opacity = 1;
+        imageElement.style.cursor = 'default';
+        centeredText.style.display = 'none';
+        document.getElementById('input_file').disabled = true;
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              // get loaded data and render thumbnail.
+              
+          };
+
+          read the image file as a data URL.
+          reader.readAsDataURL(this.files[0]);
+      };
+
+      $("form#pan-form").submit(function(e) {
+        var formData = new FormData(this);
+        console.log(formData);
+        var url = "/api/pan"; // the script where you handle the form input.
+        var data = $("#pan-form").serialize();
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#pan-form").serialize(), // serializes the form's elements.
+            success: function(data) {
+               alert(data); // show response from the php script.
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+        return true;
+      });
+
+    </script>
+    <!-- Bootstrap core JavaScript -->
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+  </body>
+
+</html>
