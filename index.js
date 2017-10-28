@@ -5,7 +5,10 @@ const app = express();
 const path = require("path");
 const fileUpload = require("express-fileupload");
 const initFirebase = require("./services/firebaseAdmin");
+const morgan = require("morgan");
 
+
+app.use(morgan('tiny'));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.raw());
 app.use(fileUpload());
