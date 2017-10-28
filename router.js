@@ -15,7 +15,11 @@ const upload = multer({
 
 module.exports = function(app) {
   app.get('/', function (req, res) {
-    res.send('Hello World!')
+    res.render('./public/index.html');
+  })
+
+  app.get('/test', function (req, res) {
+    res.send('Hello World!');
   })
   
   /**
@@ -27,7 +31,7 @@ module.exports = function(app) {
     let buffer = req.body;
     console.log(buffer);
     console.log(buffer.toString());
-    res.send('submitted image');
+    res.sendFile('submitted image');
   });
 
   app.post("/api/upload", function(req, res) {
