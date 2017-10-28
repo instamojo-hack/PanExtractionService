@@ -39,8 +39,19 @@ img {
   transform: translate(-50%, -50%);
 }
 
-/*login signup css*/
-
 .btn-info {
   background-color: #4174b1;
+}
+
+.response-message{
+  font-size: 2rem;
+  display: none;
+}
+
+.success-message {
+  color: #00ff00;
+}
+
+.error-message {
+  color: #ff0000;
 }

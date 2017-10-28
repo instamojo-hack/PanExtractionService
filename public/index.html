@@ -58,7 +58,7 @@
             <img src="img/pan-card.jpg" id="preview-img" />
             <div id="centered_text">upload pan card</div>
           </div>
-          <form action="api/pan" method="POST" enctype="multipart/form-data">
+          <form action="api/pan" method="POST" enctype="multipart/form-data" id="pan-form">
             <input type="file" name="file" class="file-input" id="input_file">
             <div class="text-center"> 
               <button type="submit" class="btn btn-info">Submit</button>
@@ -67,6 +67,10 @@
         </div>
       </div>
       <!-- /.row -->
+      <div class="row response-message text-center">
+        <div class="success-message">Pan card submitted sucessfully!</div>
+        <div class="error-message">Please upload valid pan card!</div>
+      </div>
 
     </div>
     <!-- /.container -->
@@ -78,31 +82,50 @@
       </div>
       <!-- /.container -->
     </footer>
+    <script src="vendor/jquery/jquery.min.js"></script>
     <script type="text/javascript">
       function uploadFile() {
         document.getElementById('input_file').click();
       }
       document.getElementById('input_file').onchange = function () {
+        var imageElement = document.getElementById("preview-img");
+        var centeredText = document.getElementById("centered_text");
+        imageElement.src = e.target.result;
+        imageElement.style.opacity = 1;
+        imageElement.style.cursor = 'default';
+        centeredText.style.display = 'none';
+        document.getElementById('input_file').disabled = true;
           var reader = new FileReader();
 
           reader.onload = function (e) {
               // get loaded data and render thumbnail.
-              var imageElement = document.getElementById("preview-img");
-              var centeredText = document.getElementById("centered_text");
-              imageElement.src = e.target.result;
-              imageElement.style.opacity = 1;
-              imageElement.style.cursor = 'default';
-              centeredText.style.display = 'none';
-              document.getElementById('input_file').disabled = true;
+              
           };
 
-          // read the image file as a data URL.
+          read the image file as a data URL.
           reader.readAsDataURL(this.files[0]);
       };
 
+      $("form#pan-form").submit(function(e) {
+        var formData = new FormData(this);
+        console.log(formData);
+        var url = "/api/pan"; // the script where you handle the form input.
+        var data = $("#pan-form").serialize();
+        console.log(data);
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: $("#pan-form").serialize(), // serializes the form's elements.
+            success: function(data) {
+               alert(data); // show response from the php script.
+            }
+        });
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+        return true;
+      });
+
     </script>
     <!-- Bootstrap core JavaScript -->
-    <script src="vendor/jquery/jquery.min.js"></script>
     <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
   </body>
