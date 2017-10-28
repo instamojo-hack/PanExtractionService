@@ -12,7 +12,8 @@ body {
 }
 
 .file-input {
-  height: 3rem;
+  height: 1rem;
+  visibility: hidden;
   width: auto;
 }
 
