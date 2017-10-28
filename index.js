@@ -9,7 +9,6 @@ const initFirebase = require("./services/firebaseAdmin");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.raw());
 app.use(fileUpload());
-//initFirebase();
 
 router(app);
 

@@ -6,7 +6,6 @@ const vision = require('@google-cloud/vision')({
 const admin = require("../services/firebaseAdmin");
 const helper = require("../lib/googleVisionHelper");
 
-
 const prepareFirebasePayload = function prepareFirebasePayload(parsedResponse, imgBufferData) {
   parsedResponse.rawImage = imgBufferData;
   console.log("Firebase payload: \n", parsedResponse);
