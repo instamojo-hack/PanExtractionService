@@ -1,4 +1,4 @@
-const googleVisionController = require("./controllers/googleVision");
+const postPanDataController = require("./controllers/postPanData");
 const getPanDataController = require("./controllers/getPanData");
 
 module.exports = function(app) {
@@ -23,7 +23,7 @@ module.exports = function(app) {
   /**
    * Gets an binary image data as request, returns the extracted information.
    */
-  app.post("/api/pan", googleVisionController.processImage);
+  app.post("/api/pan", postPanDataController.processImage);
 
-  app.get("/api/pan", getPanDataController.getPanData)
+  app.get("/api/pan", getPanDataController.getPanData);
 };
