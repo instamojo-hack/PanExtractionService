@@ -16,4 +16,7 @@ module.exports = function(app) {
   app.post("/api/pan", postPanDataController.processImage);
 
   app.get("/api/pan", getPanDataController.getPanData);
+
+  // For updating existing records, ideally a PUT
+  app.post("api/pan/:recordId", updatePanController.updatePanDetails);
 };
