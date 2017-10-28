@@ -1,21 +1,32 @@
-// Imports the Google Cloud client library
-var vision = require('@google-cloud/vision')({
+const vision = require('@google-cloud/vision')({
   projectId: 'hack-mojo',
   keyFilename: 'google-vision-key.json'
 });
 
-var image = {
-  source: {imageUri: 'gs://path/to/image.jpg'}
-};
+const helper = require('../lib/googleVisionHelper');
 
-const processImage = function(imgBufferData, cb) {
+const extractImgBufferData = function(req) {
+  const fileName = Object.keys(req.files)[0];
+  const imgDataBuffer = new Buffer(req.files.sample.data);
+  const base64EncodedImgData = imgDataBuffer.toString('base64');
+  return base64EncodedImgData;
+}
+
+const processImage = function(req, res) {
+  if (!req.files){
+    res.status(500)
+    return res.send("Something went wrong");
+  } 
   const image = {
-    content: imgBufferData
+    content: extractImgBufferData(req)
   }
   vision.textDetection(image).then(response => {
-    console.log(response);
+    const parsedResponse = helper.parsePanCardResponse(response);
+    res.json(parsedResponse);
   }).catch(err => {
     console.error(err);
+    res.status(500);
+    return res.send("Something went wrong");
   });
 }
 
