@@ -3,9 +3,11 @@ const router = require('./router');
 const bodyParser = require('body-parser');
 const app = express();
 const path = require('path');
+const fileUpload = require('express-fileupload');
 
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(bodyParser.raw())
+app.use(bodyParser.raw());
+app.use(fileUpload());
 
 router(app);
 
