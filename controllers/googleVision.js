@@ -3,7 +3,25 @@ const vision = require('@google-cloud/vision')({
   keyFilename: 'google-vision-key.json'
 });
 
-const helper = require('../lib/googleVisionHelper');
+const admin = require("../services/firebaseAdmin");
+const helper = require("../lib/googleVisionHelper");
+
+
+const prepareFirebasePayload = function prepareFirebasePayload(parsedResponse, imgBufferData) {
+  parsedResponse.rawImage = imgBufferData;
+  console.log("Firebase payload: \n", parsedResponse);
+  return parsedResponse;
+}
+
+const pushToFirebase = function pushToFirebase(firebasePayload) {
+  admin.database().ref(`/panDetails`)
+  .push(firebasePayload)
+  .then(() => {
+    console.log("Sucessfully pushed to firebase");
+  }).catch((err) => {
+    console.error(err);
+  });
+}
 
 const extractImgBufferData = function(req) {
   const fileName = Object.keys(req.files)[0];
@@ -17,11 +35,15 @@ const processImage = function(req, res) {
     res.status(500)
     return res.send("Something went wrong");
   } 
+  const imgBufferData = extractImgBufferData(req);
   const image = {
-    content: extractImgBufferData(req)
+    content: imgBufferData
   }
+
   vision.textDetection(image).then(response => {
     const parsedResponse = helper.parsePanCardResponse(response);
+    const firebasePayload = prepareFirebasePayload(parsedResponse, imgBufferData)
+    pushToFirebase(firebasePayload);
     res.json(parsedResponse);
   }).catch(err => {
     console.error(err);
