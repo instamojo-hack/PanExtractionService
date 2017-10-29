@@ -26,13 +26,13 @@ $(document).ready(function(){
 			                              `+v.name+`
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="correct">
+			                              <input type="radio" name="name-data" value="correct">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="wrong">
+			                              <input type="radio" name="name-data" value="wrong">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="modified">
+			                              <input type="radio" name="name-data" value="modified" data-name="modified-data">
 			                            </td>
 			                          </tr>
 
@@ -41,13 +41,13 @@ $(document).ready(function(){
 			                              `+v.panNumber+`
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="correct">
+			                              <input type="radio" name="pan-data" value="correct">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="wrong">
+			                              <input type="radio" name="pan-data" value="wrong">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="modified">
+			                              <input type="radio" name="pan-data" value="modified" data-pan="modified-data">
 			                            </td>
 			                          </tr>
 
@@ -56,13 +56,13 @@ $(document).ready(function(){
 			                              `+v.dob+`
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="correct">
+			                              <input type="radio" name="dob-data" value="correct">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="wrong">
+			                              <input type="radio" name="dob-data" value="wrong">
 			                            </td>
 			                            <td>
-			                              <input type="radio" name="data" value="modified">
+			                              <input type="radio" name="dob-data" value="modified" data-dob="modified-data">
 			                            </td>
 			                          </tr>
 			                        </tbody>
@@ -87,6 +87,16 @@ $(document).ready(function(){
 				setTimeout(function() {
 				sr.reveal(".single-list", block);  
 			},100);
+
+			function editable() {
+				$("input[type='radio']").on('click', function() {
+					if($(this).data('name') || $(this).data('pan') || $(this).data('dob')) {
+						$(this).closest("tr").find("td:first").attr('contenteditable', 'true').css('border', '2px solid skyblue' );
+					}
+				});
+			}
+
+			editable();
 	    }
 	});
 });
