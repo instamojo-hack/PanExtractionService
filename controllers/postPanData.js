@@ -7,6 +7,7 @@ const async = require("async");
 const admin = require("../services/firebaseAdmin");
 const googleVisionHelper = require("../lib/googleVisionHelper");
 const firebaseHelper = require("../lib/fireBaseHelper");
+const path = require("path");
 
 const extractImgBufferData = function(req) {
   console.log(req.files);
@@ -25,7 +26,7 @@ const processPanImage = function(req, res) {
     if (!req.files || (Object.keys(req.files).length === 0 && req.files.constructor === Object) ){
       console.error("req.files is not populated");
       res.status(500)
-      return res.send("Error in processPanImage");
+      return res.sendFile(path.resolve("public/template/500.html"));
     }
     imgBufferData = extractImgBufferData(req);
   }
@@ -63,16 +64,12 @@ const processPanImage = function(req, res) {
     if(err) {
       console.error(err);
       res.status(500);
-      return res.send("Something went wrong");
+      return res.sendFile(path.resolve("public/template/500.html"));
     }
     if (!(results.validateLabels && results.validateWeb)) {
       console.error("PAN validation failed.");
       res.status(422);
-      return res.json(
-        {
-          statusCode: 422,
-          message: "PAN validation failed!"
-        });
+      return res.sendFile(path.resolve("public/template/422.html"));
     }
     console.log("All validations passed!");
   
@@ -80,10 +77,7 @@ const processPanImage = function(req, res) {
       const parsedResponse = googleVisionHelper.parseTextDetectionResponse(response);
       if (!parsedResponse) {
         res.status(422);
-        return res.json({
-          statusCode: 422,
-          message: "The PAN details failed validation"
-        }).end();
+        return res.sendFile(path.resolve("public/template/422.html"));
       }
       const firebasePayload = firebaseHelper.prepareFirebasePayload(parsedResponse, imgBufferData)
       firebaseHelper.pushToFirebase(firebasePayload);
