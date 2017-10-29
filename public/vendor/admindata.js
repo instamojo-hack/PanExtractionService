@@ -91,7 +91,7 @@ $(document).ready(function(){
 			function editable() {
 				$("input[type='radio']").on('click', function() {
 					if($(this).data('name') || $(this).data('pan') || $(this).data('dob')) {
-						$(this).closest("tr").find("td:first").attr('contenteditable', 'true');
+						$(this).closest("tr").find("td:first").attr('contenteditable', 'true').css('font-weight', 'bold');
 					}
 				});
 			}
