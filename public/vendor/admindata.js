@@ -7,7 +7,7 @@ $(document).ready(function(){
 			$.each(result, function(k,v) {
 				adminHtml += `
 							<tr class="single-list">
-			                  <td class="text-center baseimage" style="background-image= url('data:image/png;base64,`+v.rawImage+`');">
+			                  <td class="text-center baseimage" style="background-image: url('data:image/png;base64,`+v.rawImage+`');">
 			                  
 			                  </td>
 			                  <td class="text-center">
