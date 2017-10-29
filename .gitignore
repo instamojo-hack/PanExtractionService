@@ -3,3 +3,4 @@ package-lock.json
 google-vision-key.json
 firebase-config.json
 .vscode
+.temp
