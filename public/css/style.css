@@ -215,10 +215,6 @@ td.text-right {
   animation-duration: 1s;
   animation-delay: 0.1s;
 }
-.upload_label_field {
-  animation-duration: 0.5s;
-  animation-delay: 0.5s;
-}
 .baseimage {
   background-size: contain;
   background-repeat: no-repeat;

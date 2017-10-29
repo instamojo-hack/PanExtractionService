@@ -2,7 +2,6 @@ $(document).ready(function(){
 	$.ajax({
 		url: "http://localhost:3000/api/pan",
 		success: function(result){
-			console.log(result);
 			var adminHtml = '';
 			$.each(result, function(k,v) {
 				adminHtml += `
@@ -78,6 +77,16 @@ $(document).ready(function(){
 							`;
 				$('#adminData').html(adminHtml);
 			});
-		}
+		},
+		complete: function (jqXHR, status) {
+  		    window.sr = ScrollReveal();
+			var block = {
+				reset: true,
+				duration : 1000
+			}
+				setTimeout(function() {
+				sr.reveal(".single-list", block);  
+			},100);
+	    }
 	});
 });
