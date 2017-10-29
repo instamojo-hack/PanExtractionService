@@ -50,7 +50,7 @@ const processPanImage = function(req, res) {
       vision.webDetection(image).then(response => {
         console.log(JSON.stringify(response));
         const panConfidenceScore = googleVisionHelper.parseWebDetectionResponse(response);
-        const PASS_THRESHOLD_CONFIDENCE = 0.60;
+        const PASS_THRESHOLD_CONFIDENCE = 0.40;
         const passed = panConfidenceScore > PASS_THRESHOLD_CONFIDENCE;
         console.log(`panConfidenceScore: ${panConfidenceScore} ; passed: ${passed}`);
         cb(null, passed);
@@ -68,15 +68,26 @@ const processPanImage = function(req, res) {
     if (!(results.validateLabels && results.validateWeb)) {
       console.error("PAN validation failed.");
       res.status(422);
-      return res.send("PAN validation failed!");
+      return res.json(
+        {
+          statusCode: 422,
+          message: "PAN validation failed!"
+        });
     }
     console.log("All validations passed!");
   
     vision.textDetection(image).then(response => {
       const parsedResponse = googleVisionHelper.parseTextDetectionResponse(response);
+      if (!parsedResponse) {
+        res.status(422);
+        return res.json({
+          statusCode: 422,
+          message: "The PAN details failed validation"
+        }).end();
+      }
       const firebasePayload = firebaseHelper.prepareFirebasePayload(parsedResponse, imgBufferData)
       firebaseHelper.pushToFirebase(firebasePayload);
-      res.json(parsedResponse);
+      return res.json(parsedResponse);
     }).catch(err => {
       console.error(err);
       res.status(500);
